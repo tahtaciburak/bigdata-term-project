@@ -7,8 +7,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.5.1/dist/leaflet.css"
+    integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+    crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.5.1/dist/leaflet.js"
+    integrity="sha512-GffPMF3RvMeYyc1LWMHtK8EbPv0iNZ8/oTtHPx9/cc2ILxQ+u905qIwdpULaqDkyBKgOaB57QTMg7ztg8Jm2Og=="
+    crossorigin=""></script>
 </head>
-
+<style>
+#mapid { height: 230px; }
+</style>
 <body>
     <div class="container">
         <div class="header">
@@ -35,7 +43,7 @@
         </div>
         <div class="col-md-8">
             <h4>Map</h4>
-            <canvas id="myChart" width="400" height="250"></canvas>                
+            <div id="mapid"></div>               
         </div>
         <div class="col-md-4">
             <h4>FBI Code <button class="btn btn-success btn-sm" onclick="httpGet('/fbi_code/start');">Start Job</button><button class="btn btn-danger btn-sm" onclick="httpGet('/fbi_code/delete')">Delete Data</button></h4>
@@ -219,6 +227,18 @@ $(document).ready(function(){
             }
         });
     })
+    
+    x = parseFloat(51.505);
+    y = parseFloat(-0.09);
+    var mymap = L.map('mapid').setView([51.505, -0.09], 13);
+    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1Ijoia29wZWNpZ2l2byIsImEiOiJjanZsNWdib2gwb3NrNGNvZmVva2hzM3lvIn0.36MSmaC_fNd6ZBQk8s40hA', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: 'mapbox.streets',
+        accessToken: 'your.mapbox.access.token'
+    }).addTo(mymap);
+
+    marker = L.marker([x,y]).addTo(mymap);
 });
 </script>
 </html>
