@@ -8,10 +8,43 @@ CRIME_TYPE_PATH="../CrimeType"
 ARREST_TYPE_PATH="../Arrest"
 YEAR_PATH="../Year"
 FBI_CODE_PATH="../FBICode"
+LATITUDE_PATH="../LocationAverageLatitude"
+LONGITUDE_PATH="../LocationAverageLongitude"
 
 @app.route("/")
 def main():
     return render_template('index.html')
+
+########MAP START
+@app.route("/map/start")
+def start_map():
+    os.system("cd ../LocationAverageLatitude && ls && ./run.sh")
+    os.system("cd ../LocationAverageLongitude && ls && ./run.sh")
+    return "bitti"
+
+@app.route("/map")
+def get_map_data():
+    latitude = 0
+    longitude = 0
+    try:
+        with open(LATITUDE_PATH+"/out_directory/part-r-00000") as f:
+            lines = f.readlines()
+            cur_line = lines[0]
+            cur_line = float(cur_line.replace("\n","").replace("\t","").replace(" ",""))
+            latitude = cur_line
+
+        with open(LONGITUDE_PATH+"/out_directory/part-r-00000") as f:
+            lines = f.readlines()
+            cur_line = lines[0]
+            cur_line = float(cur_line.replace("\n","").replace("\t","").replace(" ",""))
+            longitude = cur_line
+                    
+    except:
+        latitude = 0
+        longitude = 0
+    return jsonify({"latitude":latitude,"longitude":longitude})
+
+########MAP END
 
 ########FBICODE START
 @app.route("/fbi_code/start")
